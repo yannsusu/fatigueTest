@@ -1,0 +1,6 @@
+flask
+flask-sqlalchemy
+Werkzeug
+pymysql
+opencv-python
+Pillow

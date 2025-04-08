@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.username }}!</h1>
+    <p>Your password is: {{ user.password }}</p>
+    <p>Your phone number is: {{ user.phone }}</p>
+<!--    <img src="data:image/jpeg;base64,{{ user_photo }}" alt="User Photo">-->
+    <img src="/IMG_8978.jpg" alt="User Photo">
+    <a href="/edit_info">Edit</a >
+    {% if message %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+{% endif %}
+</body>
+</html>

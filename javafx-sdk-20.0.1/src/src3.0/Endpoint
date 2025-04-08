@@ -1,0 +1,25 @@
+from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+# 定义一个路由和处理函数
+@app.route('/api/hello', methods=['GET'])
+def hello():
+    return jsonify({'message': 'Hello, World!'})
+
+# 定义一个带有参数的路由和处理函数
+@app.route('/api/greet/<name>', methods=['GET'])
+def greet(name):
+    return jsonify({'message': f'Hello, {name}!'})
+
+# 定义一个接收POST请求的路由和处理函数
+@app.route('/api/sum', methods=['POST'])
+def sum_numbers():
+    data = request.get_json()
+    num1 = data['num1']
+    num2 = data['num2']
+    result = num1 + num2
+    return jsonify({'result': result})
+
+if __name__ == '__main__':
+    app.run()

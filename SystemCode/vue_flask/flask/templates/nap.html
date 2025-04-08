@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Realtime Data</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 定时请求实时数据
+            setInterval(getRealtimeData, 1000);
+        });
+
+        function getRealtimeData() {
+            $.ajax({
+                url: '/realtime_data',
+                method: 'GET',
+                success: function(response) {
+                    // 在成功获取实时数据后更新页面显示
+                    updateDataDisplay(response);
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+
+        function updateDataDisplay(data) {
+            // 在页面上更新实时数据显示
+            $('#blink').text(data[0]);
+            $('#yawn').text(data[1]);
+        }
+    </script>
+</head>
+<body>
+    <h1>Realtime Data</h1>
+    <p>Blink: <span id="blink"></span></p>
+    <p>Yawn: <span id="yawn"></span></p>
+</body>
+</html>

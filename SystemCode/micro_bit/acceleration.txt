@@ -1,0 +1,98 @@
+function randomWait () {
+    randomWaitPeriod = Math.randomRange(100, 9900)
+    basic.pause(100)
+}
+function fireworks2 () {
+    music.play(music.tonePlayable(784, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(880, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(1046, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(1175, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(784, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(880, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(587, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(698, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+}
+input.onButtonPressed(Button.A, function () {
+    music.stopAllSounds()
+})
+function fireworks3 () {
+    music.play(music.tonePlayable(392, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(440, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(523, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(349, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+}
+function fireworks1 () {
+    music.play(music.tonePlayable(784, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(880, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(1046, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(698, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(784, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(880, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(1046, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(698, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+}
+radio.onReceivedString(function (receivedString) {
+    if (receivedString == "handshake") {
+        if (state == 0) {
+            state = 1
+            randomWait()
+            radio.sendString("enrol=" + control.deviceName())
+        }
+    } else {
+        if (state == 1) {
+            buffer = receivedString.split("=")
+            if (buffer[0] == "sensor") {
+                if (buffer[1] == "acc") {
+                    radio.sendString("" + control.deviceName() + "=" + difference)
+                }
+            }
+        }
+    }
+})
+function fireworks () {
+    fireworks1()
+    fireworks2()
+}
+let z_acc = 0
+let y_acc = 0
+let x_acc = 0
+let acc = 0
+let last_acc = 0
+let difference = 0
+let buffer: string[] = []
+let state = 0
+let randomWaitPeriod = 0
+music.setVolume(100)
+randomWaitPeriod = 0
+radio.setGroup(8)
+radio.setTransmitSerialNumber(true)
+radio.setTransmitPower(7)
+basic.showIcon(IconNames.Yes)
+basic.forever(function () {
+    basic.showNumber(state)
+    last_acc = acc
+    basic.pause(100)
+    x_acc = input.acceleration(Dimension.X)
+    y_acc = input.acceleration(Dimension.Y)
+    z_acc = input.acceleration(Dimension.Z)
+    acc = Math.sqrt(x_acc * x_acc + (y_acc * y_acc + z_acc * z_acc))
+    difference = last_acc - acc
+    if (difference > 50 || difference < -50) {
+        basic.showLeds(`
+            # . . . #
+            . # . # .
+            . . # . .
+            . # . # .
+            # . . . #
+            `)
+        fireworks()
+    } else {
+        basic.showLeds(`
+            . . . . .
+            . . . . .
+            . . . . .
+            . . . . .
+            . . . . .
+            `)
+    }
+})
